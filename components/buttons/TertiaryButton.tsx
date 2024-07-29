@@ -1,12 +1,18 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { ReactNode } from "react";
+import { StyleSheet } from "react-native";
+
 import BaseButton from "./BaseButton";
 import { COLORS } from "../../constants/themes";
 
-export default function TertiaryButton() {
+type Props = {
+  onPress: () => void;
+  children: ReactNode;
+};
+
+export default function TertiaryButton({ onPress, children }: Props) {
   return (
-    <BaseButton textStyle={styles.text} onPress={() => {}}>
-      Log in
+    <BaseButton textStyle={styles.text} onPress={onPress}>
+      {children}
     </BaseButton>
   );
 }

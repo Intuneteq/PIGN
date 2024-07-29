@@ -1,41 +1,35 @@
+import { useRef } from "react";
 import {
   Animated,
   FlatList,
   SafeAreaView,
   StyleSheet,
   View,
-  ViewToken,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import slides, { OnboardingSlide } from "../constants/onboarding";
+
 import { SIZES } from "../constants/themes";
-import OnboardingItem from "../components/onboarding/OnboardingItem";
-import { useRef, useState } from "react";
+import slides from "../constants/onboarding";
+
 import Paginator from "../components/ui/Paginator";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import TertiaryButton from "../components/buttons/TertiaryButton";
+import OnboardingItem from "../components/onboarding/OnboardingItem";
 
-type ViewableItemInfo = {
-  viewableItems: ViewToken<OnboardingSlide>[];
-  changed: ViewToken<OnboardingSlide>[];
-};
+import useOnboarding from "../hooks/useOnboarding";
 
 export default function Onboarding() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { setOnboarded } = useOnboarding();
+
+  function getStartedHandler() {
+    setOnboarded();
+  }
+
+  function loginHandler() {
+    setOnboarded();
+  }
 
   const slideRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
-
-  const viewableItemsChanged = useRef(({ viewableItems }: ViewableItemInfo) => {
-    if (
-      viewableItems &&
-      viewableItems.length > 0 &&
-      viewableItems[0].index !== null
-    ) {
-      setCurrentIndex(viewableItems[0].index);
-    }
-  }).current;
-
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
@@ -48,12 +42,10 @@ export default function Onboarding() {
             horizontal
             showsHorizontalScrollIndicator={false}
             pagingEnabled
-            // bounces={false}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
               { useNativeDriver: false }
             )}
-            onViewableItemsChanged={viewableItemsChanged}
             viewabilityConfig={viewConfig}
             ref={slideRef}
           />
@@ -62,8 +54,10 @@ export default function Onboarding() {
           <Paginator count={slides.length} scrollX={scrollX} />
 
           <View style={styles.buttons}>
-            <PrimaryButton />
-            <TertiaryButton />
+            <PrimaryButton onPress={getStartedHandler}>
+              Get Started
+            </PrimaryButton>
+            <TertiaryButton onPress={loginHandler}>Log in</TertiaryButton>
           </View>
         </View>
       </View>
@@ -89,7 +83,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     marginTop: 67,
-    width: '80%',
-    marginHorizontal: 'auto'
+    width: "80%",
+    marginHorizontal: "auto",
   },
 });

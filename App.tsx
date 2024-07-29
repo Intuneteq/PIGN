@@ -1,59 +1,36 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
+import { StyleSheet, View } from "react-native";
 
-// import {} from "themes";
-
-import grotesk from "@expo-google-fonts/hanken-grotesk";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Home from "./screens/Home";
 import Onboarding from "./screens/Onboarding";
-import OnboardingItem from "./components/onboarding/OnboardingItem";
+
+import Loading from "./components/Loading";
+
+import useLoadFonts from "./hooks/useLoadFonts";
+import useOnboarding from "./hooks/useOnboarding";
 
 export default function App() {
-  // const { useFonts, ...rest } = grotesk;
-  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
-
-  // const [loaded, error] = useFonts({ ...rest });
-
-  // useEffect(() => {
-  //   if (loaded || error) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded, error]);
-
-  useEffect(() => {
-    async function checkFirstLaunch() {
-      const hasLaunched = await AsyncStorage.getItem("hasLaunched");
-
-      if (hasLaunched === null) {
-        setIsFirstLaunch(true);
-      } else {
-        setIsFirstLaunch(false);
-      }
-    }
-
-    checkFirstLaunch();
-  }, []);
+  const { loaded, error } = useLoadFonts();
+  const { loading, viewedOnboarding } = useOnboarding();
 
   /**
    * Fonts not loaded
    */
-  // if (!loaded && !error) {
-  //   return null; // Return Loading Spinner
-  // }
-
-  if (isFirstLaunch === null) {
-    return null; // or a loading spinner
+  if (loading || (!loaded && !error)) {
+    return <Loading />;
   }
 
   return (
-    <View style={styles.container}>
-      {/* <Text>Open up App.tsx to start working on your app!</Text> */}
+    <>
       <StatusBar style="auto" />
-      {/* <OnboardingItem /> */}
-      <Onboarding />
-    </View>
+      {viewedOnboarding ? (
+        <Home />
+      ) : (
+        <View style={styles.container}>
+          <Onboarding />
+        </View>
+      )}
+    </>
   );
 }
 
