@@ -4,6 +4,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function useOnboarding() {
   const [loading, setLoading] = useState(true);
   const [viewedOnboarding, setViewedOnboarding] = useState(false);
+  const [initialRouteName, setInitialRouteName] = useState<
+    "OnboardingStack" | "AppStack" | null
+  >(null);
 
   async function checkOnboardingHandler() {
     try {
@@ -31,5 +34,11 @@ export default function useOnboarding() {
     checkOnboardingHandler();
   }, []);
 
-  return { loading, viewedOnboarding, setOnboarded };
+  useEffect(() => {
+    if (!loading) {
+      setInitialRouteName(viewedOnboarding ? "AppStack" : "OnboardingStack");
+    }
+  }, [loading, viewedOnboarding]);
+
+  return { initialRouteName, loading, viewedOnboarding, setOnboarded };
 }

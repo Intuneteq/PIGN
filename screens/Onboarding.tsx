@@ -16,16 +16,21 @@ import TertiaryButton from "../components/buttons/TertiaryButton";
 import OnboardingItem from "../components/onboarding/OnboardingItem";
 
 import useOnboarding from "../hooks/useOnboarding";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "../navigations/types";
 
 export default function Onboarding() {
   const { setOnboarded } = useOnboarding();
+  const navigation = useNavigation<RootNavigationProp>();
 
   function getStartedHandler() {
     setOnboarded();
+    navigation.navigate("AppStack");
   }
 
   function loginHandler() {
     setOnboarded();
+    navigation.navigate("AppStack");
   }
 
   const slideRef = useRef(null);
@@ -33,39 +38,46 @@ export default function Onboarding() {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.onboarding}>
-          <FlatList
-            data={slides}
-            renderItem={({ item }) => <OnboardingItem item={item} />}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              { useNativeDriver: false }
-            )}
-            viewabilityConfig={viewConfig}
-            ref={slideRef}
-          />
-        </View>
-        <View style={styles.footer}>
-          <Paginator count={slides.length} scrollX={scrollX} />
+    <View style={styles.screen}>
+      <SafeAreaView>
+        <View style={styles.container}>
+          <View style={styles.onboarding}>
+            <FlatList
+              data={slides}
+              renderItem={({ item }) => <OnboardingItem item={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                { useNativeDriver: false }
+              )}
+              viewabilityConfig={viewConfig}
+              ref={slideRef}
+            />
+          </View>
+          <View style={styles.footer}>
+            <Paginator count={slides.length} scrollX={scrollX} />
 
-          <View style={styles.buttons}>
-            <PrimaryButton onPress={getStartedHandler}>
-              Get Started
-            </PrimaryButton>
-            <TertiaryButton onPress={loginHandler}>Log in</TertiaryButton>
+            <View style={styles.buttons}>
+              <PrimaryButton onPress={getStartedHandler}>
+                Get Started
+              </PrimaryButton>
+              <TertiaryButton onPress={loginHandler}>Log in</TertiaryButton>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   container: {
     flex: 1,
     paddingTop: 27,
