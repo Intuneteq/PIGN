@@ -7,7 +7,13 @@ type Props = {
   item: OnboardingSlide;
 };
 
-export default function OnboardingItem({}: Props) {
+// Import images statically
+const images: { [key: string]: any } = {
+  "onboarding1.png": require("../../assets/images/onboarding1.png"),
+  "onboarding2.png": require("../../assets/images/onboarding2.png"),
+};
+
+export default function OnboardingItem({ item }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -17,15 +23,10 @@ export default function OnboardingItem({}: Props) {
         />
       </View>
       <View style={styles.screenImageContainer}>
-        <Image
-          style={styles.screenImage}
-          source={require("../../assets/images/onboarding1.png")}
-        />
+        <Image style={styles.screenImage} source={images[item.image]} />
       </View>
-      <Text style={styles.title}>Smart Storage</Text>
-      <Text style={styles.description}>
-        Smart file management system for saving important files
-      </Text>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.description}>{item.description}</Text>
     </View>
   );
 }
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     width: SIZES.width,
+    paddingHorizontal: 51,
   },
   logoContainer: {
     width: 89,
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   screenImageContainer: {
-    width: 220,
+    width: "100%",
     height: 340,
     minHeight: 340,
     marginBottom: 33.5,
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
   screenImage: {
     width: "100%",
     height: "100%",
+    objectFit: "scale-down",
   },
   title: {
     color: COLORS.blackBase,

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 
 import { SIZES } from "../constants/themes";
 import slides from "../constants/onboarding";
@@ -25,12 +26,24 @@ export default function Onboarding() {
 
   function getStartedHandler() {
     setOnboarded();
-    navigation.navigate("AppStack");
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "AppStack" }],
+      })
+    );
   }
 
   function loginHandler() {
     setOnboarded();
-    navigation.navigate("AppStack");
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "AppStack" }],
+      })
+    );
   }
 
   const slideRef = useRef(null);
