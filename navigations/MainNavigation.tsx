@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
 import { RootStackParamList } from "./types";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import OnboardingStackNavigator from "./OnboardingStackNavigator";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import useOnboarding from "../hooks/useOnboarding";
+
+import OnboardingStackNavigator from "./OnboardingStackNavigator";
 import AppStackNavigator from "./AppStackNavigator";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

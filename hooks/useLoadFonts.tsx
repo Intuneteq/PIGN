@@ -26,11 +26,15 @@ export default function useLoadFonts() {
     HankenGrotesk_900Black,
   });
 
+  /**
+   * Hide the Application's Splash screen when the custom font is loaded
+   */
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
 
+  // Return the loaded value and error value
   return { loaded, error };
 }

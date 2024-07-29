@@ -11,7 +11,10 @@ export default function App() {
   const { loading, initialRouteName } = useOnboarding();
 
   /**
-   * Fonts not loaded
+   * loading: checking onboarding state
+   * initialRouteName: The stack to be routed to - AppStack or OnboardingStack. If null, App is still loading
+   * loaded: fonts loaded state
+   * error: error from trying to load the fonts
    */
   if (loading || initialRouteName === null || (!loaded && !error)) {
     return <Loading />;
